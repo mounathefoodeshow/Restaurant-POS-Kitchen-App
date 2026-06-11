@@ -14,7 +14,19 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('../views/AdminView.vue'),
-        meta: { requiresAuth: true, role: 'admin' }
+        meta: { requiresAuth: true, role: 'admin' },
+        children: [
+            {
+                path: 'categories',
+                name: 'Categories',
+                component: () => import('../views/admin/CategoriesView.vue')
+            },
+            {
+                path: 'menu-items',
+                name: 'MenuItems',
+                component: () => import('../views/Admin/MenuItemsView.vue')
+            }
+        ]
     },
     {
         path: '/pos',
@@ -35,10 +47,10 @@ const router = createRouter({
     routes
 })
 
-// this part i use itto check role and Auth 
+
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token')
-    const user = JSON.parse(localStorage.getItem('user') || 'null')
+    const user  = JSON.parse(localStorage.getItem('user') || 'null')
 
     if (to.meta.requiresAuth && !token) {
         next('/login')
